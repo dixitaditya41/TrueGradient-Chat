@@ -31,6 +31,8 @@ const chatSlice = createSlice({
   name: "chat",
   initialState: {
     messages: [],
+    chatSessions: [],
+    currentChatId: null,
     loading: false,
     sending: false,
     error: null,
@@ -41,6 +43,53 @@ const chatSlice = createSlice({
     },
     clearMessages: (state) => {
       state.messages = [];
+    },
+    createNewChat: (state) => {
+      // Save current chat if it has messages
+      if (state.messages.length > 0) {
+        const newChatSession = {
+          id: Date.now().toString(),
+          title: state.messages.find(msg => msg.role === 'user')?.content.slice(0, 30) + '...' || 'New Chat',
+          messages: [...state.messages],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        state.chatSessions.unshift(newChatSession);
+      }
+      
+      // Create new chat
+      const newChatId = Date.now().toString();
+      state.currentChatId = newChatId;
+      state.messages = [];
+    },
+    switchToChat: (state, action) => {
+      const chatId = action.payload;
+      const chatSession = state.chatSessions.find(chat => chat.id === chatId);
+      
+      if (chatSession) {
+        // Save current chat if it has messages
+        if (state.messages.length > 0 && state.currentChatId) {
+          const currentChatIndex = state.chatSessions.findIndex(chat => chat.id === state.currentChatId);
+          if (currentChatIndex !== -1) {
+            state.chatSessions[currentChatIndex].messages = [...state.messages];
+            state.chatSessions[currentChatIndex].updatedAt = new Date().toISOString();
+          }
+        }
+        
+        // Switch to selected chat
+        state.currentChatId = chatId;
+        state.messages = [...chatSession.messages];
+      }
+    },
+    deleteChat: (state, action) => {
+      const chatId = action.payload;
+      state.chatSessions = state.chatSessions.filter(chat => chat.id !== chatId);
+      
+      // If we're deleting the current chat, clear messages
+      if (state.currentChatId === chatId) {
+        state.messages = [];
+        state.currentChatId = null;
+      }
     },
     updateLastMessage: (state, action) => {
       if (state.messages.length > 0) {
@@ -100,5 +149,5 @@ const chatSlice = createSlice({
   }
 });
 
-export const { addMessage, clearMessages, updateLastMessage, setError, clearError } = chatSlice.actions;
+export const { addMessage, clearMessages, createNewChat, switchToChat, deleteChat, updateLastMessage, setError, clearError } = chatSlice.actions;
 export default chatSlice.reducer;

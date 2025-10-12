@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import { Plus, MessageSquare, ChevronLeft, Trash2 } from "lucide-react";
+import { Plus, MessageSquare, ChevronLeft, Trash2, Menu } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearMessages } from "../../redux/slices/chatSlice";
+import { createNewChat, switchToChat, deleteChat } from "../../redux/slices/chatSlice";
 
 const Sidebar = ({ isCollapsed, onToggleCollapse }) => {
   const dispatch = useDispatch();
-  const { messages } = useSelector((state) => state.chat);
+  const { messages, chatSessions, currentChatId } = useSelector((state) => state.chat);
 
   const handleNewChat = () => {
-    dispatch(clearMessages());
+    dispatch(createNewChat());
+  };
+
+  const handleChatClick = (chatId) => {
+    dispatch(switchToChat(chatId));
+  };
+
+  const handleDeleteChat = (chatId, e) => {
+    e.stopPropagation();
+    dispatch(deleteChat(chatId));
   };
 
   const getChatTitle = (messages) => {
@@ -49,11 +58,25 @@ const Sidebar = ({ isCollapsed, onToggleCollapse }) => {
         <button
           onClick={handleNewChat}
           className="mb-4 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          title="New Chat"
         >
           <Plus size={20} />
         </button>
-        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-          <MessageSquare size={16} className="text-white" />
+        <div className="flex-1 overflow-y-auto space-y-2">
+          {chatSessions.slice(0, 5).map((chat) => (
+            <button
+              key={chat.id}
+              onClick={() => handleChatClick(chat.id)}
+              className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                currentChatId === chat.id
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+              }`}
+              title={chat.title}
+            >
+              <MessageSquare size={16} />
+            </button>
+          ))}
         </div>
       </div>
     );
@@ -85,27 +108,46 @@ const Sidebar = ({ isCollapsed, onToggleCollapse }) => {
 
       {/* Chat List */}
       <div className="flex-1 overflow-y-auto">
-        {messages.length > 0 ? (
-          <div className="p-2">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
-              <h3 className="font-semibold text-blue-900 text-sm mb-1">
-                {getChatTitle(messages)}
-              </h3>
-              <p className="text-blue-700 text-xs mb-2">
-                {getLastMessage(messages)}
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-blue-600 text-xs">
-                  {formatDate(messages[0]?.createdAt)}
-                </span>
-                <button
-                  onClick={handleNewChat}
-                  className="text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  <Trash2 size={14} />
-                </button>
+        {chatSessions.length > 0 ? (
+          <div className="p-2 space-y-2">
+            {chatSessions.map((chat) => (
+              <div
+                key={chat.id}
+                onClick={() => handleChatClick(chat.id)}
+                className={`p-3 rounded-lg cursor-pointer transition-colors ${
+                  currentChatId === chat.id
+                    ? 'bg-blue-50 border border-blue-200'
+                    : 'hover:bg-gray-100 border border-transparent'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-gray-900 text-sm mb-1 truncate">
+                      {chat.title}
+                    </h3>
+                    <p className="text-gray-600 text-xs mb-2 line-clamp-2">
+                      {chat.messages.length > 0 
+                        ? chat.messages[chat.messages.length - 1].content.slice(0, 50) + 
+                          (chat.messages[chat.messages.length - 1].content.length > 50 ? "..." : "")
+                        : "No messages yet"
+                      }
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500 text-xs">
+                        {formatDate(chat.updatedAt)}
+                      </span>
+                      <button
+                        onClick={(e) => handleDeleteChat(chat.id, e)}
+                        className="text-gray-400 hover:text-red-600 transition-colors p-1"
+                        title="Delete chat"
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         ) : (
           <div className="flex-1 flex items-center justify-center p-4">
