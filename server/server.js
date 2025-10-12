@@ -13,18 +13,13 @@ const app = express();
 // Middleware
 app.use(cors(
   {
-    origin: ['http://localhost:5173'],
+    origin: ['https://true-gradient-chat.vercel.app'],
     credentials: true,
   }
 ));
 
 app.use(express.json());
 app.use(cookieParser());
-// app.use((req, res, next) => {
-//   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-//   res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-//   next();
-// });
 
 // Routes
 app.use("/api", router);
@@ -42,4 +37,5 @@ connectDB().then(async () => {
 });
 
 export default app;
+
  
