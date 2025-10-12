@@ -1,4 +1,4 @@
-# 🤖 TrueGradient Chat — LLM-Based Chat Platform
+# 🤖 TrueGradient Chat — AI-Based Chat Platform
 
 Welcome to **TrueGradient Chat**, a full-stack AI-powered chat platform that integrates authentication, credit-based LLM chat, organization management, and real-time notifications.
 
