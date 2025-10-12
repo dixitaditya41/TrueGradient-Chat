@@ -61,6 +61,8 @@ const Navbar = () => {
       const result = await dispatch(createOrg(inputValue.trim())).unwrap();
       // Update auth state with new organization
       dispatch(addOrganization(result));
+      // Refresh organization list to keep orgSlice in sync
+      dispatch(fetchUserOrgs());
       setShowCreateModal(false);
       setInputValue("");
     } catch (error) {

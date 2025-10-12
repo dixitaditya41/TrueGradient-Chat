@@ -57,8 +57,8 @@ const orgSlice = createSlice({
         s.error = a.error.message;
       })
       .addCase(createOrg.fulfilled, (s, a) => {
-        s.list.push(a.payload);
-        s.activeOrg = a.payload;
+        // Organization creation is handled by authSlice to avoid duplicates
+        // No need to handle here since authSlice manages user.organizations
       })
       .addCase(switchOrganization.fulfilled, (s, a) => {
         s.activeOrg = a.payload.activeOrganization;
