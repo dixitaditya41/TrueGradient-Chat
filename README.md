@@ -8,7 +8,7 @@ This project serves as the **foundational architecture** for a complete AI works
 
 ## 📋 Assignment Overview
 
-This project fulfills the core requirements for the **LLM Chat Platform Assignment**, including:
+This project fulfills the core requirements for the **AI Chat Platform Assignment**, including:
 
 1. **Authentication & Onboarding**
 2. **Chat Interface with Credit System**
