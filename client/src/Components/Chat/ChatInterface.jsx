@@ -80,7 +80,7 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-white h-full">
+    <div className="flex-1 flex flex-col bg-white h-full overflow-hidden">
       
       <div className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-6">
         {messages.length === 0 ? (

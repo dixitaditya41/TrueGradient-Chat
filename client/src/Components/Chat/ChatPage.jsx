@@ -27,7 +27,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-1 bg-white h-screen overflow-hidden">
+    <div className="flex flex-1 bg-white h-full overflow-hidden">
       {/* Mobile Sidebar Overlay */}
       {mobileSidebarOpen && (
         <div 
