@@ -66,12 +66,23 @@ This project fulfills the core requirements for the **LLM Chat Platform Assignme
 |-------|---------------|
 | **Frontend** | React.js (Vite), Tailwind CSS, Redux Toolkit, React Router, Axios, Socket.IO Client |
 | **Backend** | Node.js, Express.js, MongoDB / PostgreSQL, Socket.IO, JWT, bcrypt |
-| **LLM Integration** | OpenAI / Gemini / Ollama (configurable endpoint) |
-| **Deployment** | Frontend: Vercel / Netlify <br> Backend: Render / Railway |
+| **LLM Integration** |  Gemini 
+| **Deployment** | Frontend: Vercel , Backend: Render 
 | **Auth** | JWT + Google OAuth (OAuth2.0) |
 
 ---
 
-## 🧠 Folder Structure
 
-### 🖥️ Frontend
+
+### 🖥️ Setup and Start Frontend
+1)cd client
+npm install
+
+2)npm run dev
+
+
+### 🖥️ Setup and Start Backend
+1)cd server
+npm install
+
+2)2)npm start
