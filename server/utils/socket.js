@@ -8,7 +8,7 @@ export function initSocket(server) {
 
   const io = new Server(server, {
     cors: { 
-      origin: ['http://localhost:5173'],
+      origin: ['https://true-gradient-chat.vercel.app'],
       methods: ['GET','POST'],
       credentials: true
     },
@@ -62,3 +62,4 @@ export async function sendGlobalNotification(message) {
 
   io.emit('notification', notification);
 }
+
