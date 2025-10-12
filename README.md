@@ -75,14 +75,10 @@ This project fulfills the core requirements for the **LLM Chat Platform Assignme
 
 
 ### 🖥️ Setup and Start Frontend
-1)cd client
-  npm install
-
-2) npm run dev
+1)cd client && npm install
+2)npm run dev
 
 
 ### 🖥️ Setup and Start Backend
-1)cd server
-  npm install
-
-2) npm start
+1)cd server && npm install
+2)npm start
