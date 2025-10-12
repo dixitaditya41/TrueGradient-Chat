@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Bell, ChevronDown, Plus, LogOut, Settings, UserRound, UserPlus, Coins, Edit } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, updateActiveOrganization, updateActiveOrganizationName } from "../../redux/slices/authSlice";
+import { logout, updateActiveOrganization, updateActiveOrganizationName, addOrganization } from "../../redux/slices/authSlice";
 import { markAllNotificationsRead, fetchNotifications, addNotification } from "../../redux/slices/notificationsSlice";
 import { fetchUserOrgs, createOrg, inviteToOrg, switchOrganization, renameOrg } from "../../redux/slices/orgSlice";
 import { fetchChatHistory } from "../../redux/slices/chatSlice";
@@ -55,11 +55,17 @@ const Navbar = () => {
   }, [dispatch, user?._id]);
 
 
-  const handleCreateOrg = () => {
+  const handleCreateOrg = async () => {
     if (!inputValue.trim()) return;
-    dispatch(createOrg(inputValue.trim()));
-    setShowCreateModal(false);
-    setInputValue("");
+    try {
+      const result = await dispatch(createOrg(inputValue.trim())).unwrap();
+      // Update auth state with new organization
+      dispatch(addOrganization(result));
+      setShowCreateModal(false);
+      setInputValue("");
+    } catch (error) {
+      console.error("Failed to create organization:", error);
+    }
   };
 
   const handleInvite = () => {

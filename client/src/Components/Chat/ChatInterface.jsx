@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Send, Bot, User } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage, addMessage } from "../../redux/slices/chatSlice";
-import { updateActiveOrganizationName } from "../../redux/slices/authSlice";
+import { updateActiveOrganizationName, updateCredits } from "../../redux/slices/authSlice";
 
 const ChatInterface = () => {
   const dispatch = useDispatch();
@@ -41,8 +41,12 @@ const ChatInterface = () => {
     dispatch(addMessage(userMessage));
 
     try {
+      const result = await dispatch(sendMessage({ message })).unwrap();
       
-      await dispatch(sendMessage({ message })).unwrap();
+      // Update credits in Redux state
+      if (result.remainingCredits !== undefined) {
+        dispatch(updateCredits(result.remainingCredits));
+      }
     } catch (err) {
       console.error("Failed to send message:", err);
       

@@ -86,6 +86,17 @@ const authSlice = createSlice({
         state.user.activeOrganization.name = action.payload;
       }
     },
+    updateCredits: (state, action) => {
+      if (state.user) {
+        state.user.credits = action.payload;
+      }
+    },
+    addOrganization: (state, action) => {
+      if (state.user) {
+        state.user.organizations.push(action.payload);
+        state.user.activeOrganization = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -155,5 +166,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, updateActiveOrganization, updateActiveOrganizationName } = authSlice.actions;
+export const { logout, updateActiveOrganization, updateActiveOrganizationName, updateCredits, addOrganization } = authSlice.actions;
 export default authSlice.reducer;
